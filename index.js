@@ -1,15 +1,24 @@
-const http = require('node:http');
+const express = require("express");
+const axios = require("axios");
+const app = express();
 
-const hostname = '127.0.0.1';
-const port = 3000;
+app.set("view engine", "ejs");
+app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true }));
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello, World!\n');
+app.get("/", (req, res) => {
+  res.render("index");
 });
-console.log('main')
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-}); 
-console.log('branch_1');
+
+app.post("/repos", async (req, res) => {
+  const username = req.body.username;
+  try {
+    const response = await axios.get(`https://api.github.com/users/${username}/repos`);
+    res.render("repos", { repos: response.data, username });
+  } catch (err) {
+    res.send("Kullanıcı bulunamadı veya GitHub API hatası.");
+  }
+});
+
+const PORT = 3000;
+app.listen(PORT, () => console.log(`http://localhost:${PORT} üzerinden çalışıyor.`));
