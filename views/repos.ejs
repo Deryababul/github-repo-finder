@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= username %>'in Repo Listesi</title>
+</head>
+<body>
+  <h1><%= username %>'in GitHub Reposu:</h1>
+  <ul>
+    <% repos.forEach(repo => { %>
+      <li>
+        <a href="<%= repo.html_url %>" target="_blank"><%= repo.name %></a> - ⭐ <%= repo.stargazers_count %>
+      </li>
+    <% }) %>
+  </ul>
+</body>
+</html>
